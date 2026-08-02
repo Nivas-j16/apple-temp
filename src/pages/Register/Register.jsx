@@ -1,85 +1,106 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout";
+import { register } from "../../services/authService";
 
 function Register() {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    const { error } = await register(
+      form.fullName,
+      form.email,
+      form.password
+    );
+
+    setLoading(false);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    alert("Registration Successful!");
+
+    navigate("/login");
+  };
+
   return (
     <MainLayout>
-      <section className="min-h-[80vh] flex items-center justify-center bg-gray-100 px-6">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+      <section className="min-h-screen flex justify-center items-center bg-gray-100">
 
-          {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-orange-500 rounded-xl flex items-center justify-center text-white text-3xl font-bold">
-              A
-            </div>
-          </div>
-
-          <h1 className="text-3xl font-bold text-center text-gray-800">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg"
+        >
+          <h1 className="text-3xl font-bold text-center mb-8">
             Create Account
           </h1>
 
-          <p className="text-center text-gray-500 mt-2">
-            Join Apple Temp today
-          </p>
+          <input
+            name="fullName"
+            placeholder="Full Name"
+            className="border w-full p-3 rounded mb-4"
+            onChange={handleChange}
+            required
+          />
 
-          <form className="mt-8 space-y-5">
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            className="border w-full p-3 rounded mb-4"
+            onChange={handleChange}
+            required
+          />
 
-            <div>
-              <label className="block mb-2 font-medium">
-                Full Name
-              </label>
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            className="border w-full p-3 rounded mb-6"
+            onChange={handleChange}
+            required
+          />
 
-              <input
-                type="text"
-                placeholder="Enter your name"
-                className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
+          <button
+            disabled={loading}
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg"
+          >
+            {loading ? "Creating..." : "Create Account"}
+          </button>
 
-            <div>
-              <label className="block mb-2 font-medium">
-                Email
-              </label>
-
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">
-                Password
-              </label>
-
-              <input
-                type="password"
-                placeholder="Create password"
-                className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold"
-            >
-              Create Account
-            </button>
-
-          </form>
-
-          <p className="text-center mt-6">
+          <p className="mt-6 text-center">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-orange-500 font-semibold"
+              className="text-orange-500"
             >
               Login
             </Link>
           </p>
 
-        </div>
+        </form>
+
       </section>
     </MainLayout>
   );
