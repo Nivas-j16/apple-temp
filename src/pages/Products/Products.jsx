@@ -1,5 +1,5 @@
 import MainLayout from "../../components/layout/MainLayout";
-import ProductCard from "../../components/product/ProductCard";
+import ProductCard from "../../components/products/ProductCard";
 
 function Products() {
 

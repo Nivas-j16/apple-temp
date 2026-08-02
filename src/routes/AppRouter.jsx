@@ -2,11 +2,12 @@ import { Routes, Route } from "react-router-dom";
 
 // Pages
 import Home from "../pages/Home/Home";
-import Products from "../pages/Product/Product";
+import Products from "../pages/Products/Products";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Admin from "../pages/Admin/Admin";
+
 
 function AppRouter() {
   return (
